@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Rama Sir</title>
+
+    <!-- EmailJS CDN (browser SDK) [web:16][web:2] -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        /* ============= BASE RESET ============= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #e0f2fe, #eef2ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            color: #0f172a;
+        }
+
+        /* ============= CARD ============= */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px 22px 22px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+            position: relative;
+            overflow: hidden;
+            animation: floatIn 0.6s ease-out;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 60%);
+            top: -40px;
+            right: -40px;
+            pointer-events: none;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ============= HEADER ============= */
+        .header {
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #eff6ff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        h1 {
+            font-size: 1.6rem;
+        }
+
+        .subtitle {
+            font-size: 0.88rem;
+            color: #64748b;
+        }
+
+        /* ============= FORM ============= */
+        form {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #475569;
+        }
+
+        .required {
+            color: #ef4444;
+            font-size: 0.78rem;
+            margin-left: 4px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 10px 11px;
+            font-size: 0.92rem;
+            outline: none;
+            background: #f8fafc;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, background 0.15s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2563eb;
+            background: #ffffff;
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+            transform: translateY(-1px);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .error {
+            font-size: 0.78rem;
+            color: #dc2626;
+            margin-top: 3px;
+        }
+
+        .input-error {
+            border-color: #f97373 !important;
+            background: #fef2f2 !important;
+        }
+
+        /* ============= BUTTON & MESSAGES ============= */
+        .btn-row {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: #ffffff;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.45);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.03);
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.5);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .loader {
+            width: 14px;
+            height: 14px;
+            border-radius: 999px;
+            border: 2px solid rgba(219, 234, 254, 0.85);
+            border-top-color: transparent;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .small-note {
+            font-size: 0.76rem;
+            color: #94a3b8;
+        }
+
+        .msg-box {
+            display: none;
+            border-radius: 999px;
+            padding: 7px 10px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .msg-box span.icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+        }
+
+        .msg-success {
+            background: #ecfdf3;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .msg-success span.icon {
+            background: #4ade80;
+            color: #064e3b;
+        }
+
+        .msg-error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .msg-error span.icon {
+            background: #fca5a5;
+            color: #7f1d1d;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="title-row">
+                <div class="avatar">R</div>
+                <div>
+                    <h1>Contact Rama Sir</h1>
+                    <p class="subtitle">Send a quick learning or training query using this form.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success & error messages -->
+        <div id="successMsg" class="msg-box msg-success">
+            <span class="icon">✓</span>
+            <span id="successText"></span>
+        </div>
+        <div id="errorMsg" class="msg-box msg-error">
+            <span class="icon">!</span>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- Contact Form -->
+        <form id="contactForm" novalidate>
+            <!-- Name -->
+            <div class="form-group">
+                <label for="user_name">Name <span class="required">*</span></label>
+                <input type="text" id="user_name" name="user_name" placeholder="Your full name">
+                <div class="error" id="error_name"></div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="user_email">Gmail ID <span class="required">*</span></label>
+                <input type="email" id="user_email" name="user_email" placeholder="yourname@gmail.com">
+                <div class="error" id="error_email"></div>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="user_phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="user_phone" name="user_phone" placeholder="10–15 digit mobile number">
+                <div class="error" id="error_phone"></div>
+            </div>
+
+            <!-- Topic -->
+            <div class="form-group">
+                <label for="topic">Topic <span class="required">*</span></label>
+                <select id="topic" name="topic">
+                    <option value="">Select a topic</option>
+                    <option value="Excel Training">Excel Training</option>
+                    <option value="Advanced Excel (VBA)">Advanced Excel (VBA)</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="JavaScript Programming">JavaScript Programming</option>
+                    <option value="Other Query">Other Query</option>
+                </select>
+                <div class="error" id="error_topic"></div>
+            </div>
+
+            <!-- Message -->
+            <div class="form-group">
+                <label for="message">Message <span class="required">*</span></label>
+                <textarea id="message" name="message" placeholder="Write your message in 2–3 short lines."></textarea>
+                <div class="error" id="error_message"></div>
+            </div>
+
+            <!-- Button + note -->
+            <div class="btn-row">
+                <button type="submit" id="submitBtn">
+                    <span id="btnText">Send message</span>
+                    <span id="btnLoader" class="loader" style="display:none;"></span>
+                </button>
+                <p class="small-note">
+                    Your message will be sent securely to: ramaraviai2025@gmail.com (via EmailJS, no server needed).[web:16][web:2]
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // =========================
+        // EmailJS Setup
+        // =========================
+        // 1. Create a free account at https://www.emailjs.com
+        // 2. Create a service, template, and get your public key.[web:16][web:2]
+        // 3. Replace the placeholders below.
+
+        const SERVICE_ID = 'service_o8hc7s9';   // Replace with your EmailJS Service ID
+        const TEMPLATE_ID = 'template_tf7v6b3'; // Replace with your EmailJS Template ID
+        const PUBLIC_KEY = 'CdB9TvXGFyqX1gJNF';   // Replace with your EmailJS Public Key
+
+        // Initialize EmailJS with your public key
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof emailjs !== 'undefined') {
+                emailjs.init(PUBLIC_KEY); // Official init format for browser SDK.[web:16]
+            }
+        });
+
+        // =========================
+        // Form Elements
+        // =========================
+        const form = document.getElementById('contactForm');
+        const successMsg = document.getElementById('successMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        const successText = document.getElementById('successText');
+        const errorText = document.getElementById('errorText');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoader = document.getElementById('btnLoader');
+
+        // =========================
+        // Submit Handler
+        // =========================
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            hideMessages();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            // Collect data
+            const formData = {
+                user_name: document.getElementById('user_name').value.trim(),
+                user_email: document.getElementById('user_email').value.trim(),
+                user_phone: document.getElementById('user_phone').value.trim(),
+                topic: document.getElementById('topic').value,
+                message: document.getElementById('message').value.trim()
+            };
+
+            // Show loading state
+            setLoading(true);
+
+            // Send via EmailJS
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, formData)
+                .then(function () {
+                    showSuccess('Your message has been sent. You will receive a reply on your Gmail shortly.');
+                    form.reset();
+                })
+                .catch(function () {
+                    showError('Could not send the message. Please try again after some time.');
+                })
+                .finally(function () {
+                    setLoading(false);
+                });
+        });
+
+        // =========================
+        // Basic Validation
+        // =========================
+        function validateForm() {
+            let ok = true;
+
+            const nameEl = document.getElementById('user_name');
+            const emailEl = document.getElementById('user_email');
+            const phoneEl = document.getElementById('user_phone');
+            const topicEl = document.getElementById('topic');
+            const msgEl = document.getElementById('message');
+
+            clearError(nameEl, 'error_name');
+            clearError(emailEl, 'error_email');
+            clearError(phoneEl, 'error_phone');
+            clearError(topicEl, 'error_topic');
+            clearError(msgEl, 'error_message');
+
+            if (!nameEl.value.trim()) {
+                setError(nameEl, 'error_name', 'Please enter your name.');
+                ok = false;
+            }
+
+            const email = emailEl.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email pattern.[web:17]
+            if (!email) {
+                setError(emailEl, 'error_email', 'Please enter your Gmail ID.');
+                ok = false;
+            } else if (!emailRegex.test(email)) {
+                setError(emailEl, 'error_email', 'Please enter a valid email address.');
+                ok = false;
+            }
+
+            const phone = phoneEl.value.replace(/\s+/g, '');
+            const phoneRegex = /^[0-9]{10,15}$/;
+            if (!phone) {
+                setError(phoneEl, 'error_phone', 'Please enter your phone number.');
+                ok = false;
+            } else if (!phoneRegex.test(phone)) {
+                setError(phoneEl, 'error_phone', 'Phone number must be 10–15 digits only.');
+                ok = false;
+            }
+
+            if (!topicEl.value) {
+                setError(topicEl, 'error_topic', 'Please select a topic.');
+                ok = false;
+            }
+
+            if (!msgEl.value.trim()) {
+                setError(msgEl, 'error_message', 'Please write a short message.');
+                ok = false;
+            }
+
+            return ok;
+        }
+
+        function setError(inputEl, errorId, message) {
+            inputEl.classList.add('input-error');
+            const errorEl = document.getElementById(errorId);
+            if (errorEl) {
+                errorEl.textContent = message;
+            }
+        }
+
+        function clearError(inputEl, errorId) {
+            inputEl.classList.remove('input-error');
+            const errorEl = document.getElementById(errorId);
+            if (errorEl) {
+                errorEl.textContent = '';
+            }
+        }
+
+        // =========================
+        // UI Helpers
+        // =========================
+        function showSuccess(text) {
+            successText.textContent = text;
+            successMsg.style.display = 'flex';
+            setTimeout(function () {
+                successMsg.style.display = 'none';
+            }, 5000);
+        }
+
+        function showError(text) {
+            errorText.textContent = text;
+            errorMsg.style.display = 'flex';
+        }
+
+        function hideMessages() {
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                btnText.textContent = 'Sending...';
+                btnLoader.style.display = 'inline-block';
+            } else {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Send message';
+                btnLoader.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
